@@ -1,18 +1,13 @@
 import os
 import re
 import pdftotext
-from pathlib import Path
-import csv
 
-BASE_DIR = Path(__file__).resolve().parent
-
-FORMAT_STRING = r"\d{4}-\d\d?"
+from common import FORMAT_STRING, CATEGORY, write_csv, DATA_DIR
 
 
 def get_pdf_files():
     ret = []
-    data_dir = os.path.join(BASE_DIR, "data")
-    keris_data_dir = os.path.join(data_dir, "keris")
+    keris_data_dir = os.path.join(DATA_DIR, "keris")
     files = os.listdir(keris_data_dir)
     for filename in files:
         print(f"{filename} read start")
@@ -30,13 +25,9 @@ def get_pdf_files():
             {
                 "year": date.split("-")[0],
                 "title": title,
-                "category": "일반문서",
+                "category": CATEGORY,
                 "context": text,
             }
         )
         # print(filename.split("."))
-    with open(os.path.join(data_dir, "output", "keris.csv"), "w") as f:
-        w = csv.writer(f)
-        w.writerow(ret[0].keys())
-        for r in ret:
-            w.writerow(r.values())
+    write_csv(ret, "output", "keris.csv")
