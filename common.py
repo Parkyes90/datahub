@@ -2,6 +2,10 @@ import csv
 import os
 from pathlib import Path
 
+from selenium.webdriver.chrome.options import Options
+
+options = Options()
+options.add_argument("--headless")
 BASE_DIR = Path(__file__).resolve().parent
 CATEGORY = "일반문서"
 FORMAT_STRING = r"\d{4}-\d\d?"

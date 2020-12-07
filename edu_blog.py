@@ -1,11 +1,9 @@
 import os
 import time
 
-from bs4 import BeautifulSoup
 from selenium import webdriver
-import requests
 
-from common import BASE_DIR, CATEGORY, write_csv
+from common import BASE_DIR, CATEGORY, write_csv, options
 
 driver = webdriver.Chrome(os.path.join(BASE_DIR, "chromedriver"))
 
@@ -48,8 +46,11 @@ def get_all_list():
         links.add(post.get_attribute("href"))
     driver.close()
 
-    for link in list(links):
-        d = webdriver.Chrome(os.path.join(BASE_DIR, "chromedriver"))
+    for idx, link in enumerate(links):
+        print(idx)
+        d = webdriver.Chrome(
+            os.path.join(BASE_DIR, "chromedriver"), options=options
+        )
         d.get(link)
         y = d.find_element_by_xpath(
             "/html/head/meta[@property='og:createdate']"
@@ -57,7 +58,7 @@ def get_all_list():
         y = y.get_attribute("content")
         y = y.split(".")[0]
         context = d.find_element_by_tag_name("body").text
-        title = d.find_element_by_tag_name("title").text
+        title = d.title
         d.close()
         ret.append(
             {
