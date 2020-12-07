@@ -134,10 +134,32 @@ def get_detail(item):
     }
 
 
+def delete_error_details():
+    ret = []
+    with open(os.path.join(DATA_DIR, "output", "edu_details.csv")) as f:
+        reader = csv.reader(f)
+        for idx, row in enumerate(reader):
+            if idx == 0:
+                continue
+            category, year, title, context = row
+
+            if "Error" not in title:
+                ret.append(
+                    {
+                        "year": year,
+                        "title": title,
+                        "category": category,
+                        "context": context,
+                    }
+                )
+    write_csv(ret, "output", "edu_details.csv")
+
+
 if __name__ == "__main__":
     # link = get_all_list()
     # write_csv(link, "output", "edu_detail_links.csv")
-    links = get_links()
-    with multiprocessing.Pool(processes=8) as pool:
-        data = pool.map(get_detail, links)
-    write_csv(data, "output", "edu_details.csv")
+    # links = get_links()
+    # with multiprocessing.Pool(processes=8) as pool:
+    #     data = pool.map(get_detail, links)
+    # write_csv(data, "output", "edu_details.csv")
+    delete_error_details()
