@@ -1,9 +1,10 @@
+import csv
 import os
 import time
 
 from selenium import webdriver
 
-from common import BASE_DIR, CATEGORY, write_csv, options
+from common import BASE_DIR, CATEGORY, write_csv, options, DATA_DIR
 
 driver = webdriver.Chrome(os.path.join(BASE_DIR, "chromedriver"))
 
@@ -72,6 +73,26 @@ def get_all_list():
     return ret
 
 
+def change_column():
+    ret = []
+    with open(os.path.join(DATA_DIR, "output", "edu_blog.csv")) as f:
+        reader = csv.reader(f)
+        for idx, row in enumerate(reader):
+            if idx == 0:
+                continue
+            title, year, context, category = row
+            ret.append(
+                {
+                    "year": year,
+                    "title": title,
+                    "category": category,
+                    "context": context,
+                }
+            )
+    return ret
+
+
 if __name__ == "__main__":
-    data = get_all_list()
+    data = change_column()
+    # data = get_all_list()
     write_csv(data, "output", "edu_blog.csv")
