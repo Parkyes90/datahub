@@ -12,6 +12,7 @@ parse = "*"
 bs4 = "*"
 selenium = "*"
 requests-html = "*"
+pdfminer = "*"
 
 [requires]
 python_version = "3.8"
